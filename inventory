@@ -1,2 +1,2 @@
 [gmk1_ubuntu_22]
-192.168.100.22 ansible_user=ggv
+192.168.10.113 ansible_user=neon

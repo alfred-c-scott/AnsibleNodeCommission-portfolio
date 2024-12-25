@@ -1,0 +1,13 @@
+- name: Create scripts directory
+  file:
+    path: /home/{{ user_1 }}/scripts
+    state: directory
+    owner: "{{ user_1 }}"
+    mode: '0700'
+
+- name: Clone NeonEnvConfig
+  ansible.builtin.git:
+    repo: 'https://github.com/alfred-c-scott/NeonEnvConfig.git'
+    dest: /home/{{ user_1 }}/scripts
+    version: master
+    force: yes

@@ -1,2 +1,2 @@
-user_1: "him"
+user_1: "neon"
 user_1_password: "{{ 'Password!23' | password_hash('sha512') }}"

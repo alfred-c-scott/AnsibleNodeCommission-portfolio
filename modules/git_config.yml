@@ -1,0 +1,11 @@
+- name: Set git global username
+  git_config:
+    name: user.name
+    value: "neon"
+    scope: global
+
+- name: Set git global email
+  git_config:
+    name: user.email
+    value: "neon@email.com"
+    scope: global

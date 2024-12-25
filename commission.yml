@@ -5,7 +5,7 @@
     - vars/user_vars.yml
   tasks:
 
-  - name: update repository cache && install
+  - name: Update repository cache && dist-upgrade
     apt:
       update_cache: yes
       upgrade: dist
@@ -21,7 +21,11 @@
       state: latest
     when: ansible_distribution == "Ubuntu"
 
-  - include_tasks: modules/create_tim.yml
+  - include_tasks: modules/add_git_ssh_key.yml
+
+  - include_tasks: modules/git_config.yml
+
+  - include_tasks: modules/git_clone_neon_setup.yml
 
   - name: Reboot the system
     reboot:
