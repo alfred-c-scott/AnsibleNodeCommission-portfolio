@@ -18,6 +18,7 @@
         - tmux
         - xrdp
         - git
+        - python3-pip
       state: latest
     when: ansible_distribution == "Ubuntu"
 
