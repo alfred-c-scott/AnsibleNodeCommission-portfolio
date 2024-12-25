@@ -1,0 +1,60 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/user_vars.yml
+  tasks:
+
+  - name: update repository cache && install
+    apt:
+      update_cache: yes
+      upgrade: dist
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install packages
+    apt:
+      name:
+        - neovim
+        - tmux
+        - xrdp
+        - git
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - include_tasks: modules/create_tim.yml
+
+  - name: Reboot the system
+    reboot:
+      reboot_timeout: 600
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Wait for the system to come back up
+    wait_for_connection:
+      delay: 10
+      timeout: 300
+    when: ansible_distribution == "Ubuntu"
+  # - name: add user_1
+  #   user:
+  #     name: "{{ user_1 }}"
+  #     comment: "user added by Ansible"
+  #     state: present
+  #     shell: /bin/bash
+
+  # - name: set password for user_1
+  #   user:
+  #     name: "{{ user_1 }}"
+      # password: "{{ user_1_password }}"
+
+# TODO: git config --global email and name
+
+# TODO: fix power settings
+# -----------------------------------
+# Change the following lines in /etc/gdm3/greeter.deconf-defaults
+# -----------------------------------
+#
+# # - Time inactive in seconds before suspending with AC power
+# #   1200=20 minutes, 0=never
+# sleep-inactive-ac-timeout=0
+# # - What to do after sleep-inactive-ac-timeout
+# #   'blank', 'suspend', 'shutdown', 'hibernate', 'interactive' or 'nothing'
+# sleep-inactive-ac-type='nothing'

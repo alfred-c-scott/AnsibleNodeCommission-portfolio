@@ -1,0 +1,62 @@
+# - name: create tim's user account
+#   hosts: all
+#   tasks:
+
+- name: Add user and add to sudo group
+  user:
+    name: "{{ user_1 }}"
+    comment: "User added by Ansible"
+    password: "{{ user_1_password }}"
+    update_password: on_create
+    groups: sudo
+    append: yes
+    state: present
+    shell: /bin/bash
+
+- name: Create .ssh directory
+  file:
+    path: /home/{{ user_1 }}/.ssh
+    state: directory
+    owner: "{{ user_1 }}"
+    mode: '0700'
+
+- name: Copy private key
+  copy:
+    src: files/gmdev_id_ed25519
+    dest: /home/{{ user_1 }}/.ssh/id_ed25519
+    owner: "{{ user_1 }}"
+    mode: '0600'
+
+- name: Copy public key
+  copy:
+    src: files/gmdev_id_ed25519.pub
+    dest: /home/{{ user_1 }}/.ssh/id_ed25519.pub
+    owner: "{{ user_1 }}"
+    mode: '0644'
+
+# - name: Ensure SSH agent is running
+#   shell: |
+#     eval $(ssh-agent -s)
+#     ssh-add /home/{{ user_1 }}/.ssh/id_ed25519
+#   args:
+#     executable: /bin/bash
+#   register: ssh_agent_status
+#   changed_when: ssh_agent_status.rc == 0
+
+# - name: Print SSH agent status
+#   debug:
+#     var: ssh_agent_status.stdout
+
+- name: Set Git global username
+  git_config:
+    name: user.name
+    value: "ggv"
+    scope: global
+
+- name: Set Git global email
+  git_config:
+    name: user.email
+    value: "ggv@email.com"
+    scope: global
+
+# TODO: fix power settings
